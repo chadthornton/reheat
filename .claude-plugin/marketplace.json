@@ -1,0 +1,22 @@
+{
+  "name": "reheating-local",
+  "owner": {
+    "name": "Chad Thornton"
+  },
+  "metadata": {
+    "description": "Local marketplace for reheating plugin",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "reheating",
+      "source": "./",
+      "description": "Create handoff documents that let any AI coding agent continue your work across sessions",
+      "version": "1.0.0",
+      "author": {
+        "name": "Chad Thornton"
+      },
+      "license": "MIT"
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Node modules (if testing)
+node_modules/
+
+# Test outputs
+*.log
+
+# Local Claude settings
+.claude/settings.local.json
+
+# Generated handoff files (user-created, not part of repo)
+HANDOFF.md
+
+# Handoff archives (user-created, not part of repo)
+# But track the README that explains the policy
+handoff-archive/HANDOFF-*.md

@@ -1,0 +1,10 @@
+{
+  "name": "reheating",
+  "version": "1.0.0",
+  "description": "Create handoff documents that let any AI coding agent continue your work across sessions",
+  "author": {
+    "name": "Chad Thornton"
+  },
+  "license": "MIT",
+  "skills": "./skills/"
+}
