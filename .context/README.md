@@ -189,7 +189,7 @@ Example: Learning about event loop blocking → Decision on scaling strategy
 
 ### Archiving
 - When creating new handoff, entire `.context/` directory is archived
-- Archived to `handoff-archive/.context-YYYYMMDD-HHMM/`
+- Archived to `resume-archive/.context-YYYYMMDD-HHMM/`
 - Fresh `.context/` directory is created for new session
 
 ### Version Control
@@ -314,7 +314,7 @@ On subsequent `/reheat:save` calls:
 
 When archived:
 ```
-handoff-archive/
+resume-archive/
 ├── RESUME-20260101-0900.md
 ├── RESUME-20260101-1500.md
 ├── .context-20260101-0900/

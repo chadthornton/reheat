@@ -100,8 +100,8 @@ ln -s $(pwd) ~/.claude/skills/reheat
 
 All save commands automatically archive existing RESUME.md files:
 ```bash
-# Creates handoff-archive/ directory
-# Moves old file to handoff-archive/RESUME-YYYYMMDD-HHMM.md
+# Creates resume-archive/ directory
+# Moves old file to resume-archive/RESUME-YYYYMMDD-HHMM.md
 ```
 
 ## Key Files

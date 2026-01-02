@@ -26,17 +26,17 @@ Create a concise RESUME.md file in the project root with essential information o
 
 **IMPORTANT - Archive Existing Handoff:**
 Before creating the new RESUME.md, check if one already exists. If it does:
-1. Create a `handoff-archive/` directory if it doesn't exist
-2. Move the existing RESUME.md to `handoff-archive/HANDOFF-YYYYMMDD-HHMM.md` with the current timestamp
+1. Create a `resume-archive/` directory if it doesn't exist
+2. Move the existing RESUME.md to `resume-archive/RESUME-YYYYMMDD-HHMM.md` with the current timestamp
 3. Inform the user that the previous handoff was archived
 
 Example:
 ```bash
 if [ -f RESUME.md ]; then
-  mkdir -p handoff-archive
+  mkdir -p resume-archive
   timestamp=$(date +%Y%m%d-%H%M)
-  mv RESUME.md "handoff-archive/HANDOFF-${timestamp}.md"
-  echo "📦 Previous handoff archived to handoff-archive/HANDOFF-${timestamp}.md"
+  mv RESUME.md "resume-archive/RESUME-${timestamp}.md"
+  echo "📦 Previous handoff archived to resume-archive/RESUME-${timestamp}.md"
 fi
 ````
 

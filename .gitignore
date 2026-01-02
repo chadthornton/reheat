@@ -22,7 +22,7 @@ RESUME.md
 .context/*
 !.context/README.md
 
-# Handoff archives (user-created, not part of repo)
+# Resume archives (user-created, not part of repo)
 # But track the README that explains the policy
-handoff-archive/RESUME-*.md
-handoff-archive/.context-*
+resume-archive/RESUME-*.md
+resume-archive/.context-*

@@ -1,4 +1,4 @@
-# Handoff Archive
+# Resume Archive
 
 This directory stores archived versions of your RESUME.md files and .context/ directories, created automatically when you run `/reheat:save` or `/reheat:save-quick`.
 
@@ -7,9 +7,9 @@ This directory stores archived versions of your RESUME.md files and .context/ di
 Every time you create a new handoff, the plugin automatically:
 
 1. **Checks** if `RESUME.md` or `.context/` already exist in the project root
-2. **Creates** this `handoff-archive/` directory if needed
-3. **Moves** the existing `RESUME.md` to `handoff-archive/RESUME-YYYYMMDD-HHMM.md`
-4. **Moves** the existing `.context/` to `handoff-archive/.context-YYYYMMDD-HHMM/`
+2. **Creates** this `resume-archive/` directory if needed
+3. **Moves** the existing `RESUME.md` to `resume-archive/RESUME-YYYYMMDD-HHMM.md`
+4. **Moves** the existing `.context/` to `resume-archive/.context-YYYYMMDD-HHMM/`
 5. **Creates** the new `RESUME.md` and `.context/` in the project root
 
 This ensures you never lose previous handoff context while keeping your workspace clean.
@@ -42,7 +42,7 @@ If an archive is particularly valuable, you can commit it to git by moving it ou
 
 ```bash
 # Move to examples or docs
-mv handoff-archive/RESUME-20260101-1730.md docs/handoffs/milestone-v1-launch.md
+mv resume-archive/RESUME-20260101-1730.md docs/handoffs/milestone-v1-launch.md
 git add docs/handoffs/milestone-v1-launch.md
 git commit -m "docs: Archive handoff from v1 launch"
 ```
@@ -52,10 +52,10 @@ Archives accumulate over time. Clean them periodically:
 
 ```bash
 # Keep only the last 10 archives
-ls -t handoff-archive/RESUME-*.md | tail -n +11 | xargs rm
+ls -t resume-archive/RESUME-*.md | tail -n +11 | xargs rm
 
 # Delete archives older than 30 days
-find handoff-archive -name "RESUME-*.md" -mtime +30 -delete
+find resume-archive -name "RESUME-*.md" -mtime +30 -delete
 ```
 
 ### Manual Archive
@@ -63,13 +63,13 @@ To manually archive before a major change:
 
 ```bash
 timestamp=$(date +%Y%m%d-%H%M)
-cp HANDOFF.md "handoff-archive/RESUME-${timestamp}-before-refactor.md"
+cp RESUME.md "resume-archive/RESUME-${timestamp}-before-refactor.md"
 ```
 
 ## Example Timeline
 
 ```
-handoff-archive/
+resume-archive/
 ├── RESUME-20260101-0900.md  # Morning: Started feature work
 ├── RESUME-20260101-1500.md  # Afternoon: Hit blocker, documented approach
 ├── RESUME-20260102-1000.md  # Next day: Blocker resolved, new approach
@@ -79,8 +79,8 @@ handoff-archive/
 ## Tips
 
 - **Review before big changes**: Check the latest archive to remember your reasoning
-- **Search across archives**: `grep -r "authentication" handoff-archive/` finds all mentions
-- **Compare versions**: `diff handoff-archive/RESUME-20260101-0900.md handoff-archive/RESUME-20260102-1700.md`
+- **Search across archives**: `grep -r "authentication" resume-archive/` finds all mentions
+- **Compare versions**: `diff resume-archive/RESUME-20260101-0900.md resume-archive/RESUME-20260102-1700.md`
 - **Export insights**: Pull valuable learnings from archives into permanent docs
 
 ---

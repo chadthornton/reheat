@@ -22,18 +22,18 @@ Before creating new handoff, archive the old one if it exists:
 
 ```bash
 if [ -f RESUME.md ]; then
-  mkdir -p handoff-archive
+  mkdir -p resume-archive
   timestamp=$(date +%Y%m%d-%H%M)
-  mv RESUME.md "handoff-archive/RESUME-${timestamp}.md"
-  echo "📦 Previous handoff archived to handoff-archive/RESUME-${timestamp}.md"
+  mv RESUME.md "resume-archive/RESUME-${timestamp}.md"
+  echo "📦 Previous handoff archived to resume-archive/RESUME-${timestamp}.md"
 fi
 
 # Also archive .context/ if it exists
 if [ -d .context ]; then
-  mkdir -p handoff-archive
+  mkdir -p resume-archive
   timestamp=$(date +%Y%m%d-%H%M)
-  mv .context "handoff-archive/.context-${timestamp}"
-  echo "📦 Previous .context/ archived to handoff-archive/.context-${timestamp}/"
+  mv .context "resume-archive/.context-${timestamp}"
+  echo "📦 Previous .context/ archived to resume-archive/.context-${timestamp}/"
 fi
 ```
 
