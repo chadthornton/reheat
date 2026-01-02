@@ -1,6 +1,6 @@
 # Handoff Archive
 
-This directory stores archived versions of your HANDOFF.md files, created automatically when you run `/reheating:create` or `/reheating:quick`.
+This directory stores archived versions of your HANDOFF.md files, created automatically when you run `/reheat:save` or `/reheat:save-quick`.
 
 ## How It Works
 
@@ -83,4 +83,4 @@ handoff-archive/
 
 ---
 
-*This directory is managed automatically by the Reheating Instructions plugin.*
+*This directory is managed automatically by the Reheat plugin.*

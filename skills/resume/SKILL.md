@@ -1,20 +1,161 @@
 ---
 name: resume
-description: Resume work from an existing handoff document with deep cognitive rebuilding
+description: Resume work from an existing handoff document (automatically adapts to handoff depth)
 model: sonnet
 ---
 
 # Resume Work from Handoff Documentation
 
-**EXECUTION STRATEGY: Resume operations require deep focus and should be performed in a clean context for optimal cognitive rebuilding.**
+**EXECUTION STRATEGY: Resume operations require focus and should be performed in a clean context for optimal cognitive rebuilding.**
 
-## Step 1: Spawn Focused Subagent for Resume
+## Step 1: Analyze Handoff Type
 
-Use the Task tool to execute the resume process in a fresh context:
+Before spawning the subagent, check the HANDOFF.md file to determine which resume approach is appropriate.
+
+Use the Read tool to check HANDOFF.md:
+- **File size** - Quick handoffs are typically <10KB, comprehensive handoffs are >20KB
+- **Section count** - Quick handoffs have fewer sections
+- **Content markers** - Look for "QUICK HANDOFF" or comprehensive section structure
+
+Based on this analysis, spawn the appropriate subagent below.
+
+---
+
+## Option A: Quick Resume (for immediate continuation)
+
+**Use when:**
+- File size <10KB
+- Created within last 4 hours
+- Simple structure (fewer than 8 sections)
+- Short break, same-day continuation
+
+**Spawn Task with:**
 
 ```
-Use Task tool with these parameters:
+subagent_type: "general-purpose"
+description: "Quick resume for immediate continuation"
+model: "sonnet"
+prompt: "You are resuming work from a very recent handoff (same day, short break). The context is still fresh, so you need a faster resume process focused on action rather than deep cognitive rebuilding.
 
+## When to Use This
+
+Use this quick resume when:
+- ✅ Resuming within hours of creating the handoff
+- ✅ Short break (lunch, meeting, quick task switch)
+- ✅ Context is still relatively fresh
+- ✅ Just need to get oriented and continue
+
+---
+
+## Quick Resume Process (5 minutes total)
+
+### 1. Speed Read (5 minutes)
+
+Read HANDOFF.md focusing on these sections in order:
+
+**Priority 1: Action-Focused**
+- CURRENT STATUS - Where are we?
+- NEXT STEPS - What should I do?
+- CURRENT ISSUES - What's broken?
+
+**Priority 2: Failure Prevention**
+- WHAT FAILED - Skim for any approaches to avoid
+- ROOT CAUSE ANALYSIS - Any active bugs?
+
+**Priority 3: Reference (as needed)**
+- TECHNICAL CONTEXT - Where are files?
+- MENTAL MODEL - Only if you need clarification
+
+**Skip (for now):**
+- OBJECTIVE & CONTEXT - you know this
+- KEY DECISIONS - already internalized
+- HIDDEN DEPENDENCIES - check if stuck
+- COGNITIVE LOAD HELPERS - you have context
+- REFERENCES - check if needed
+
+---
+
+### 2. Quick Confirmation (30 seconds)
+
+Brief check-in:
+
+I've reviewed the handoff. Ready to continue:
+
+Status: [X]% complete
+Next: [Specific task from Priority 1]
+Avoiding: [Any failed approach if relevant]
+
+Proceeding with [specific action]. Let me know if anything changed.
+
+**No need for:**
+- Full mental model explanation
+- Detailed understanding of all failures
+- Decision rationale review
+- Unless something is unclear
+
+---
+
+### 3. Jump Right In
+
+Start working immediately on Priority 1 task.
+
+**Reference handoff as needed:**
+- Check WHAT FAILED before trying new approach
+- Check TECHNICAL CONTEXT for file locations
+- Check ROOT CAUSE ANALYSIS if debugging
+
+**Update as you go:**
+- Mark tasks complete
+- Document new failures if any
+- Update status
+
+---
+
+## If You Hit Confusion
+
+If something doesn't make sense during quick resume:
+
+1. **Stop and read that section carefully**
+   - MENTAL MODEL - if you don't understand how it works
+   - WHAT FAILED - if you're about to try something
+   - KEY DECISIONS - if you're questioning an approach
+
+2. **Inform the user you need deeper context**
+   - If it's been longer than you thought
+   - If context isn't as fresh as expected
+   - If the handoff is more complex than expected
+
+---
+
+## Remember
+
+Quick resume is for **continuity**, not **handoff**.
+
+- You're the same agent (or it hasn't been long)
+- Context is fresh
+- Just need orientation
+- Not rebuilding cognitive state
+
+**Speed is good, but understanding is better than speed when the cost of mistakes is high.**
+
+---
+
+Now execute the quick resume process."
+```
+
+---
+
+## Option B: Deep Resume (for comprehensive cognitive rebuilding)
+
+**Use when:**
+- File size >20KB
+- Created days/weeks ago
+- Comprehensive structure (12 sections)
+- Different agent or significant time gap
+
+**Spawn Task with:**
+
+```
 subagent_type: "general-purpose"
 description: "Resume from handoff with deep cognitive rebuilding"
 model: "sonnet"
@@ -159,7 +300,7 @@ Good response:
 'I see that app-level middleware failed due to circular dependency—auth routes couldn't run because they needed tokens that didn't exist yet. The root cause was applying middleware globally instead of route-specifically.
 
 I'll use route-specific middleware instead:
-router.get(\"/protected\", authMiddleware, getUserProfile)
+router.get("/protected", authMiddleware, getUserProfile)
 
 This addresses the root cause by allowing auth routes to run without middleware, while still protecting routes that need it.'
 
@@ -285,16 +426,20 @@ You've successfully resumed when:
 Now execute the resume process following all phases above."
 ```
 
-Execute the Task tool now with the prompt above.
-
 ---
 
 ## Step 2: Monitor and Support Resume Process
 
-After the subagent begins the resume process, it will:
+After the subagent begins the resume process (either quick or deep), they will:
 
-1. Read HANDOFF.md thoroughly (30 min deep reading)
-2. Confirm understanding with detailed response
+**Quick Resume:**
+1. Speed-read HANDOFF.md (5 minutes, action-focused)
+2. Provide brief confirmation of status and next action
+3. Begin working immediately on Priority 1 task
+
+**Deep Resume:**
+1. Deep-read HANDOFF.md (30 minutes, cognitive rebuilding)
+2. Confirm comprehensive understanding with detailed response
 3. Ask for your confirmation before proceeding
 4. Begin work based on documented next steps
 

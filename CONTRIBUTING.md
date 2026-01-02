@@ -21,9 +21,9 @@ The core functionality is in the skill prompts. To improve them:
 
 1. Fork the repository
 2. Edit the relevant skill file:
-   - [skills/create.md](skills/create.md) - Comprehensive handoff creation
-   - [skills/quick.md](skills/quick.md) - Quick handoff creation
-   - [skills/resume.md](skills/resume.md) - Resuming from handoffs
+   - [skills/create/SKILL.md](skills/create/SKILL.md) - Comprehensive handoff creation
+   - [skills/create-quick/SKILL.md](skills/create-quick/SKILL.md) - Quick handoff creation
+   - [skills/resume/SKILL.md](skills/resume/SKILL.md) - Smart resume (adapts to handoff depth)
 
 3. Test your changes:
    - Install the plugin locally

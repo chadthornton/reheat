@@ -1,10 +1,10 @@
 ---
-name: create
-description: Create comprehensive handoff documentation with full context, mental models, and failure analysis
+name: save
+description: Save comprehensive handoff documentation with full context, mental models, and failure analysis
 model: sonnet
 ---
 
-# Create Comprehensive Handoff Documentation
+# Save Comprehensive Handoff Documentation
 
 **EXECUTION STRATEGY: This task requires focused analysis in a clean context window for best results.**
 
@@ -729,7 +729,7 @@ The handoff documents:
 - Not just facts, but REASONING
 - Not just successes, but LEARNINGS from failures
 
-To resume: /reheating:resume or share HANDOFF.md with any AI agent
+To resume: /reheat:resume or share HANDOFF.md with any AI agent
 ```
 
 ---
@@ -783,7 +783,7 @@ The handoff documents:
 - Not just facts, but REASONING
 - Not just successes, but LEARNINGS from failures
 
-To resume: Use /reheating:resume or share HANDOFF.md with any AI agent
+To resume: Use /reheat:resume or share HANDOFF.md with any AI agent
 ```
 
 Ask the user if they'd like to review the handoff or if there's any critical context they feel is missing.

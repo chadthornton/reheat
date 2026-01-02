@@ -1,4 +1,4 @@
-# Reheating Instructions Plugin for Claude Code
+# Reheat Plugin for Claude Code
 
 Create handoff documents that let **any AI coding agent** continue your work across sessions. No more lost context or repeated mistakes.
 
@@ -12,16 +12,15 @@ AI coding sessions have limited context windows. When you switch tools, hit toke
 
 ## The Solution
 
-The Reheating Instructions plugin creates structured handoff documents (`HANDOFF.md`) that capture everything needed for seamless continuation. Think of it like reheating leftover food—you're warming up the context so it's ready to serve again.
+The Reheat plugin creates structured handoff documents (`HANDOFF.md`) that capture everything needed for seamless continuation. Think of it like reheating leftover food—you're warming up the context so it's ready to serve again.
 
 ## Features
 
-### Four Commands
+### Three Commands
 
-- **`/reheating:create`** - Generate comprehensive handoff documentation with full context
-- **`/reheating:quick`** - Create minimal handoff for straightforward tasks
-- **`/reheating:resume`** - Resume work from an existing handoff document (deep cognitive rebuilding)
-- **`/reheating:resume-quick`** - Resume quickly for immediate continuation (short breaks)
+- **`/reheat:save`** - Generate comprehensive handoff documentation with full context
+- **`/reheat:save-quick`** - Create minimal handoff for straightforward tasks
+- **`/reheat:resume`** - Resume work from existing handoff (automatically adapts to handoff depth)
 
 ### What Gets Captured
 
@@ -48,7 +47,7 @@ Just share the handoff file and the new agent can pick up right where you left o
 ### From Local Directory
 
 ```bash
-cd /path/to/claude-reheating-instructions
+cd /path/to/claude-reheat
 
 # Option 1: Test during development
 claude code --plugin-dir .
@@ -61,7 +60,7 @@ ln -s $(pwd) ~/.claude/skills/reheating
 ### From GitHub (once published)
 
 ```bash
-/plugin marketplace add yourusername/claude-reheating-instructions
+/plugin marketplace add yourusername/claude-reheat
 /plugin install reheating
 ```
 
@@ -73,12 +72,12 @@ When you're ready to end a session or want to document progress:
 
 **For complex work with multiple attempts:**
 ```
-/reheating:create
+/reheat:save
 ```
 
 **For straightforward tasks:**
 ```
-/reheating:quick
+/reheat:save-quick
 ```
 
 Claude will analyze the current state, review what's been done, and create a detailed `HANDOFF.md` file.
@@ -88,14 +87,20 @@ Claude will analyze the current state, review what's been done, and create a det
 In a new session, use:
 
 ```
-/reheating:resume
+/reheat:resume
 ```
 
 Claude will:
-1. Read and understand the handoff document
-2. Confirm understanding with you
-3. Avoid repeating documented failures
-4. Continue with the documented next steps
+1. Analyze the handoff to determine if it's a quick or comprehensive handoff
+2. Read and understand the handoff document with appropriate depth
+3. Confirm understanding with you
+4. Avoid repeating documented failures
+5. Continue with the documented next steps
+
+The resume command automatically adapts based on:
+- Handoff file size and complexity
+- How recently it was created
+- Number of sections and depth of content
 
 You can also just tell any AI agent: "Read HANDOFF.md and continue the work" and it will understand the context.
 
@@ -189,13 +194,13 @@ Learned: Need to implement refresh endpoint first, then add middleware
 
 ### When to Use Create vs Quick
 
-**Use `/reheating:create`** when:
+**Use `/reheat:save`** when:
 - Multiple approaches have been tried
 - Complex decisions were made
 - Many files are involved
 - You want maximum context preserved
 
-**Use `/reheating:quick`** when:
+**Use `/reheat:save-quick`** when:
 - Task is straightforward
 - Limited experimentation
 - Progress is linear
@@ -209,7 +214,7 @@ As work progresses, update the handoff with:
 - Updated next steps
 - New issues or blockers
 
-You can run `/reheating:create` or `/reheating:quick` again to refresh the handoff at any time.
+You can run `/reheat:save` or `/reheat:save-quick` again to refresh the handoff at any time. The previous handoff will be automatically archived with a timestamp.
 
 ### Sharing Handoffs
 
@@ -234,7 +239,7 @@ By documenting specific errors, reproduction steps, and lessons learned, we crea
 You're halfway through implementing a feature but need to switch contexts:
 
 ```
-You: /reheating:create
+You: /reheat:save
 Claude: [Analyzes current state, creates comprehensive handoff]
 Claude: ✅ Created comprehensive handoff at HANDOFF.md
 ```
@@ -242,7 +247,7 @@ Claude: ✅ Created comprehensive handoff at HANDOFF.md
 Later, in a new session:
 
 ```
-You: /reheating:resume
+You: /reheat:resume
 Claude: I've reviewed the handoff document. Here's what I understand:
 
 Objective: Implement user authentication with JWT
@@ -262,7 +267,7 @@ Does this match your understanding?
 You've been debugging but need to stop:
 
 ```
-You: /reheating:quick
+You: /reheat:save-quick
 Claude: ✅ Created quick handoff at HANDOFF.md
 
 Essential context captured:
