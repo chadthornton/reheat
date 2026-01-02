@@ -19,8 +19,10 @@ node_modules/
 
 # Generated handoff files (user-created, not part of repo)
 RESUME.md
-.context/*
+.context/*.log
 !.context/README.md
+!.context/extract-conversation.sh
+!.context/quality-tests/
 
 # Resume archives (user-created, not part of repo)
 # But track the README that explains the policy
