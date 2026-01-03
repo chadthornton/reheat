@@ -59,7 +59,33 @@ fi
 
 ---
 
-## Step 2: Spawn 6 Parallel Agents
+## Step 2: Setup Helper Script
+
+Before spawning agents, set up the conversation extraction helper script:
+
+```bash
+# Create .context/ directory (prevents race condition with parallel agents)
+mkdir -p .context
+
+# Copy helper script from plugin to project
+if [ -f ~/.claude/skills/reheat/scripts/extract-conversation.sh ]; then
+  cp ~/.claude/skills/reheat/scripts/extract-conversation.sh .context/
+  chmod +x .context/extract-conversation.sh
+  echo "✅ Helper script ready at .context/extract-conversation.sh"
+else
+  echo "⚠️  Warning: Helper script not found at ~/.claude/skills/reheat/scripts/extract-conversation.sh"
+  echo "    Agents may not be able to extract conversation context"
+fi
+```
+
+**Why this step is critical:**
+- Creates `.context/` directory synchronously before agents spawn (prevents race condition)
+- Copies helper script so background agents can access it
+- Agents will use this script to extract conversation context efficiently
+
+---
+
+## Step 3: Spawn 6 Parallel Agents
 
 Use the Task tool to spawn all 6 agents **in a single message** with `run_in_background: true`.
 
@@ -881,10 +907,10 @@ After documenting individual failures, add analysis section:
    - Do certain types of failures recur?
    - What system behaviors caused confusion?
 
-4. **Create .context/ directory and failures.log:**
+4. **Create failures.log:**
    ```bash
-   mkdir -p .context
-   # Write failures.log content
+   # Write failures.log content to .context/failures.log
+   # (.context/ directory already exists from Step 2)
    ```
 
 5. **Report completion:**
@@ -1065,10 +1091,10 @@ Decision #3 (example)
    - Do decisions depend on each other?
    - Are there conflicts or tensions?
 
-4. **Create .context/decisions.log:**
+4. **Create decisions.log:**
    ```bash
-   mkdir -p .context
-   # Write decisions.log content
+   # Write decisions.log content to .context/decisions.log
+   # (.context/ directory already exists from Step 2)
    ```
 
 5. **Report completion:**
@@ -1267,10 +1293,10 @@ This log preserves that hard-won understanding.
    - How did understanding change?
    - What corrections were made?
 
-4. **Create .context/learnings.log:**
+4. **Create learnings.log:**
    ```bash
-   mkdir -p .context
-   # Write learnings.log content
+   # Write learnings.log content to .context/learnings.log
+   # (.context/ directory already exists from Step 2)
    ```
 
 5. **Report completion:**
@@ -1302,18 +1328,41 @@ Now execute: Create .context/learnings.log with deep insights and patterns using
 
 ---
 
-## Step 3: Wait for All Agents & Assemble
+## Step 4: Wait for All Agents & Assemble
 
-After spawning all 6 agents in parallel, wait for their outputs using TaskOutput tool:
+After spawning all 6 agents in parallel, wait for their outputs using TaskOutput tool with error handling:
 
 ```
-agent1_output = TaskOutput(agent1_task_id, block=true, timeout=120000)
-agent2_output = TaskOutput(agent2_task_id, block=true, timeout=120000)
-agent3_output = TaskOutput(agent3_task_id, block=true, timeout=120000)
-agent4_output = TaskOutput(agent4_task_id, block=true, timeout=120000)
-agent5_output = TaskOutput(agent5_task_id, block=true, timeout=120000)
-agent6_output = TaskOutput(agent6_task_id, block=true, timeout=120000)
+# Increased timeout to 300000ms (5 minutes) to handle large codebases
+# Original 120000ms (2 minutes) was insufficient for comprehensive analysis
+
+agent1_output = TaskOutput(agent1_task_id, block=true, timeout=300000)
+agent2_output = TaskOutput(agent2_task_id, block=true, timeout=300000)
+agent3_output = TaskOutput(agent3_task_id, block=true, timeout=300000)
+agent4_output = TaskOutput(agent4_task_id, block=true, timeout=300000)
+agent5_output = TaskOutput(agent5_task_id, block=true, timeout=300000)
+agent6_output = TaskOutput(agent6_task_id, block=true, timeout=300000)
 ```
+
+**Error Handling:**
+
+If any agent fails or times out:
+1. **Check the agent output** - Look for error messages or partial results
+2. **Determine if partial results are usable** - Many agents can produce useful output even if they didn't complete fully
+3. **Decide on action:**
+   - If agent returned partial content: Use what exists, note incompleteness in final report
+   - If agent completely failed: Generate fallback content with warning
+   - If multiple agents failed: Consider aborting and suggesting /reheat:save-quick instead
+
+**Fallback content for failed agents:**
+- Agent 1 (RESUME 1-4): Create minimal sections with "⚠️ Limited context - agent failed"
+- Agent 2 (RESUME 5-8): Create minimal sections with "⚠️ Limited context - agent failed"
+- Agent 3 (RESUME 9-12): Use standard cross-reference template (always safe)
+- Agent 4 (failures.log): Create empty log with note about extraction failure
+- Agent 5 (decisions.log): Create empty log with note about extraction failure
+- Agent 6 (learnings.log): Create empty log with note about extraction failure
+
+**Report any failures to user in final summary.**
 
 Then assemble RESUME.md from 3 parts using Write tool:
 
@@ -1338,7 +1387,7 @@ Note: Agents 4, 5, 6 create their own files (.context/failures.log, .context/dec
 
 ---
 
-## Step 4: Cross-Reference and Synthesize
+## Step 5: Cross-Reference and Synthesize
 
 After all agents complete, perform coordinator analysis:
 
@@ -1362,7 +1411,7 @@ After all agents complete, perform coordinator analysis:
 
 ---
 
-## Step 5: Report Results to User
+## Step 6: Report Results to User
 
 Provide comprehensive summary:
 

@@ -29,12 +29,15 @@ The comprehensive save operation uses a **parallel multi-agent system**:
 
 ```
 Main Agent
-    ↓ spawns 4 parallel background agents
-    ├─→ Agent 1: Resume Builder      → RESUME.md (primary document)
-    ├─→ Agent 2: Failure Analyzer    → .context/failures.log
-    ├─→ Agent 3: Decision Tracker    → .context/decisions.log
-    └─→ Agent 4: Insight Extractor   → .context/learnings.log
+    ↓ spawns 6 parallel background agents
+    ├─→ Agent 1: RESUME sections 1-4  → RESUME.md (part 1)
+    ├─→ Agent 2: RESUME sections 5-8  → RESUME.md (part 2)
+    ├─→ Agent 3: RESUME sections 9-12 → RESUME.md (part 3)
+    ├─→ Agent 4: Failure Analyzer     → .context/failures.log
+    ├─→ Agent 5: Decision Tracker     → .context/decisions.log
+    └─→ Agent 6: Insight Extractor    → .context/learnings.log
     ↓ waits for completion
+    ↓ assembles RESUME.md from 3 parts
     ↓ cross-references and synthesizes
     └─→ Reports to user
 ```
@@ -47,7 +50,7 @@ Main Agent
 
 ### Document Format
 
-**RESUME.md** - Primary handoff document with 12 sections:
+**RESUME.md** - Primary handoff document with 9 active sections (plus 3 reserved for future):
 1. OBJECTIVE & CONTEXT - What we're building and why
 2. CURRENT STATUS - Progress with ✅ done, 🔄 in progress, ⏳ not started
 3. MENTAL MODEL - How the system works (data flow, assumptions)
@@ -57,6 +60,7 @@ Main Agent
 7. IMPORTANT NOTES & GOTCHAS - Non-obvious behavior
 8. COGNITIVE LOAD HELPERS - 3 most critical things to understand
 9. CROSS-REFERENCES - Links to .context/ diagnostic logs
+10-12. RESERVED - Placeholder sections for future enhancements
 
 **Diagnostic Logs** (`.context/`):
 - `failures.log` - Chronological failed approaches with root cause analysis

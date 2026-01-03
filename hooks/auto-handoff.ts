@@ -1,9 +1,15 @@
 /**
- * Auto-Handoff Hook
+ * Auto-Handoff Hook - REFERENCE IMPLEMENTATION
+ *
+ * ⚠️ IMPORTANT: This is a reference implementation showing how hooks COULD work.
+ * The Claude Code hooks API is not yet finalized and this file may not work in production.
+ *
+ * This file demonstrates the intended hook architecture for future implementation.
+ * Once Claude Code's hook system is available, this code will be updated to match the actual API.
  *
  * Automatically creates handoffs and spawns subagents for resume operations.
  *
- * Usage:
+ * Usage (when hooks API is available):
  * 1. Copy this file to your Claude Code hooks directory
  * 2. Configure in .claude/settings.json:
  *    "hooks": {
@@ -11,6 +17,7 @@
  *    }
  */
 
+// NOTE: This import may not match the actual Claude Code hook API when released
 import { Hook } from "@anthropic-ai/sdk";
 import * as fs from "fs";
 import * as path from "path";
@@ -113,22 +120,19 @@ export const onSessionStart: Hook<HandoffHookContext> = async (context) => {
 
   console.log(`🔥 Found handoff (${ageHours.toFixed(1)}h old), auto-resuming...`);
 
-  // Determine resume type based on age
-  const resumeType = ageHours < 4 ? "resume-quick" : "resume";
-
+  // Resume skill has adaptive logic - it will determine quick vs deep based on handoff analysis
   try {
     await task({
       subagent_type: "general-purpose",
       description: `Auto-resume from ${ageHours.toFixed(1)}h old handoff`,
-      prompt: `A handoff document exists from ${ageHours.toFixed(1)} hours ago. Use /reheat:${resumeType} to resume the work.
+      prompt: `A handoff document exists from ${ageHours.toFixed(1)} hours ago. Use /reheat:resume to resume the work.
 
-Handoff age: ${ageHours.toFixed(1)} hours
-Resume mode: ${resumeType === "resume-quick" ? "Quick (context still fresh)" : "Full (deep rebuild needed)"}
+The resume skill will automatically analyze the handoff and choose the appropriate depth (quick or deep).
 
-Execute /reheat:${resumeType} now.`,
+Execute /reheat:resume now.`,
     });
 
-    console.log(`   ✅ Resumed via ${resumeType}`);
+    console.log(`   ✅ Resumed via /reheat:resume`);
   } catch (error) {
     console.error("   ❌ Auto-resume failed:", error);
     console.log("   💡 You can manually resume with /reheat:resume");

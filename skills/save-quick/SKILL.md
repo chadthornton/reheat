@@ -34,7 +34,33 @@ fi
 
 ---
 
-## Step 2: Spawn 3 Parallel Agents
+## Step 2: Setup Helper Script
+
+Before spawning agents, set up the conversation extraction helper script:
+
+```bash
+# Create .context/ directory (prevents race condition with parallel agents)
+mkdir -p .context
+
+# Copy helper script from plugin to project
+if [ -f ~/.claude/skills/reheat/scripts/extract-conversation.sh ]; then
+  cp ~/.claude/skills/reheat/scripts/extract-conversation.sh .context/
+  chmod +x .context/extract-conversation.sh
+  echo "✅ Helper script ready at .context/extract-conversation.sh"
+else
+  echo "⚠️  Warning: Helper script not found at ~/.claude/skills/reheat/scripts/extract-conversation.sh"
+  echo "    Agents may not be able to extract conversation context"
+fi
+```
+
+**Why this step is critical:**
+- Creates `.context/` directory synchronously before agents spawn (prevents race condition)
+- Copies helper script so background agents can access it
+- Agents will use this script to extract conversation context efficiently
+
+---
+
+## Step 3: Spawn 3 Parallel Agents
 
 Use the Task tool to spawn all 3 agents **in a single message** with `run_in_background: true`.
 
@@ -319,15 +345,35 @@ Return ONLY the markdown text for section 6:
 
 ---
 
-## Step 3: Wait for All Agents & Assemble
+## Step 4: Wait for All Agents & Assemble
 
-After spawning all 3 agents in parallel, wait for their outputs using TaskOutput tool:
+After spawning all 3 agents in parallel, wait for their outputs using TaskOutput tool with error handling:
 
 ```
-agent1_output = TaskOutput(agent1_task_id, block=true, timeout=90000)
-agent2_output = TaskOutput(agent2_task_id, block=true, timeout=90000)
-agent3_output = TaskOutput(agent3_task_id, block=true, timeout=90000)
+# Increased timeout to 180000ms (3 minutes) to handle varied codebase sizes
+# Original 90000ms (1.5 minutes) was insufficient for some projects
+
+agent1_output = TaskOutput(agent1_task_id, block=true, timeout=180000)
+agent2_output = TaskOutput(agent2_task_id, block=true, timeout=180000)
+agent3_output = TaskOutput(agent3_task_id, block=true, timeout=180000)
 ```
+
+**Error Handling:**
+
+If any agent fails or times out:
+1. **Check the agent output** - Look for error messages or partial results
+2. **Determine if partial results are usable** - Many agents can produce useful output even if incomplete
+3. **Decide on action:**
+   - If agent returned partial content: Use what exists, note incompleteness in final report
+   - If agent completely failed: Generate minimal fallback content with warning
+   - If multiple agents failed: Report failure to user
+
+**Fallback content for failed agents:**
+- Agent 1 (sections 1-3): Create minimal sections with "⚠️ Limited context - agent failed"
+- Agent 2 (sections 4-5): Create minimal sections with "⚠️ Limited context - agent failed"
+- Agent 3 (section 6): Create simple "No special notes" content
+
+**Report any failures to user in final summary.**
 
 Then assemble sections into single RESUME.md using Write tool:
 
@@ -350,7 +396,7 @@ Write the assembled file to RESUME.md in project root.
 
 ---
 
-## Step 4: Report to User
+## Step 5: Report to User
 
 After assembling and writing RESUME.md:
 
