@@ -21,8 +21,9 @@ get_session_file() {
     cwd=$(pwd)
 
     # More robust path encoding - handles spaces, special chars, Unicode
-    # Replace any non-alphanumeric characters with underscores
-    encoded_path=$(echo "$cwd" | sed 's/[^a-zA-Z0-9_-]/_/g')
+    # Replace any non-alphanumeric characters (except hyphen/underscore) with underscores
+    # Note: hyphen goes first in character class to avoid being treated as range
+    encoded_path=$(echo "$cwd" | sed 's/[^-a-zA-Z0-9_]/_/g')
 
     # Use find instead of ls with glob expansion for better safety
     # This handles paths with spaces and special characters properly
