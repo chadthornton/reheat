@@ -114,7 +114,7 @@ The quality of your handoff determines how well the next agent can continue. Whe
 
 **"Skill not working"**
 - Check that all skill files exist in the `skills/` directory
-- Verify [plugin.json](plugin.json) paths are correct
+- Verify [.claude-plugin/plugin.json](.claude-plugin/plugin.json) paths are correct
 
 **"Handoff not detailed enough"**
 - Use `/reheat:save` instead of `/reheat:save-quick`

@@ -1,5 +1,8 @@
 # Reheat Plugin for Claude Code
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/chadthornton/reheat)
+
 Create handoff documents that let **any AI coding agent** continue your work across sessions. No more lost context or repeated mistakes.
 
 ## The Problem
@@ -22,6 +25,12 @@ The Reheat plugin creates structured handoff documents (`RESUME.md`) that captur
 - **`/reheat:save-quick`** - Create minimal handoff for straightforward tasks
 - **`/reheat:resume`** - Resume work from existing handoff (automatically adapts to handoff depth)
 
+| Command | Use When | Time | Output |
+|---------|----------|------|--------|
+| `/reheat:save` | Complex work, multiple attempts | ~1-2 min | RESUME.md + diagnostic logs in `.context/` |
+| `/reheat:save-quick` | Simple tasks, linear progress | ~30 sec | RESUME.md only |
+| `/reheat:resume` | Starting new session | Auto-adapts | Intelligently continues work |
+
 ### What Gets Captured
 
 ✅ **Failed approaches** with specific error messages (so they're not retried)
@@ -33,7 +42,7 @@ The Reheat plugin creates structured handoff documents (`RESUME.md`) that captur
 
 ### Agent-Agnostic Format
 
-The `HANDOFF.md` format works with any AI coding assistant:
+The `RESUME.md` format works with any AI coding assistant:
 - Claude (any version)
 - ChatGPT
 - Cursor
@@ -44,20 +53,31 @@ Just share the handoff file and the new agent can pick up right where you left o
 
 ## Installation
 
-### From Local Directory
+### Recommended: Symlink Install
+
+This makes the plugin available permanently in all Claude Code sessions:
 
 ```bash
-cd /path/to/claude-reheat
+# Clone or download to your preferred location
+cd ~/Downloads/claude-reheat  # or wherever you cloned it
 
-# Option 1: Test during development
-claude code --plugin-dir .
-
-# Option 2: Install via symlink (recommended for development)
+# Install via symlink
 mkdir -p ~/.claude/skills
 ln -s $(pwd) ~/.claude/skills/reheat
 ```
 
-### From GitHub (once published)
+### Alternative: Test Mode (Development Only)
+
+Use this only when testing changes to the plugin itself:
+
+```bash
+cd /path/to/claude-reheat
+claude code --plugin-dir .
+```
+
+### From GitHub (Coming Soon)
+
+Once published to the marketplace:
 
 ```bash
 /plugin marketplace add yourusername/claude-reheat
